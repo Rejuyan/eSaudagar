@@ -7,6 +7,7 @@ import '../../providers/settings_provider.dart';
 import '../auth/login_screen.dart';
 import 'orders_screen.dart';
 import 'wishlist_screen.dart';
+import 'edit_profile_screen.dart';
 import '../../../core/utils/fade_in_route.dart';
 import 'package:esaudagar/l10n/app_localizations.dart';
 
@@ -176,7 +177,11 @@ class ProfileScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                FadeInRoute(page: const EditProfileScreen()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 56),
               backgroundColor: Theme.of(context).cardColor,
