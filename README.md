@@ -34,12 +34,14 @@
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/Rejuyan/eSaudagar.git
    cd eSaudagar
    ```
 
 2. **Install dependencies**:
+
    ```bash
    flutter pub get
    ```
@@ -47,11 +49,13 @@
 3. **Firebase Setup**:
    - Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
    - Follow the FlutterFire CLI instructions to configure your app:
+
      ```bash
      flutterfire configure
      ```
 
 4. **Run the app**:
+
    ```bash
    flutter run
    ```
@@ -77,4 +81,4 @@ You are free to use, modify, and distribute this software for personal and comme
 For more details, please see the [LICENSE](LICENSE) file.
 
 ---
-Developed with ❤️ by [Rejuyan](https://github.com/Rejuyan)
+Developed with ❤️ by [Rejuyan](https://www.instagram.com/rejuyanul_hasan/)
