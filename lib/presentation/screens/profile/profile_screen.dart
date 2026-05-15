@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/user_provider.dart';
 import '../auth/login_screen.dart';
 import 'orders_screen.dart';
 import 'wishlist_screen.dart';
@@ -18,6 +19,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final user = authState.value;
+    final profile = ref.watch(userProfileProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -56,13 +58,26 @@ class ProfileScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            l10n.accountInformation,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            profile.name,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 8),
+          Text(
+            user?.email ?? l10n.notLoggedIn,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 32),
+          Text(
+            l10n.accountInformation,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -83,14 +98,14 @@ class ProfileScreen extends ConsumerWidget {
                   context,
                   icon: Icons.location_on_outlined,
                   title: l10n.shippingAddress,
-                  subtitle: 'House 12, Road 5, Block C\nBanani, Dhaka-1213\nBangladesh',
+                  subtitle: profile.address,
                 ),
                 const Divider(height: 32),
                 _buildProfileItem(
                   context,
                   icon: Icons.phone_outlined,
                   title: l10n.phoneNumber,
-                  subtitle: '+880 1234 567890',
+                  subtitle: profile.phone,
                 ),
               ],
             ),

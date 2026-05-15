@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:esaudagar/l10n/app_localizations.dart';
+import '../../providers/user_provider.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: 'Rejuyan');
-  final _phoneController = TextEditingController(text: '+880 1234 567890');
-  final _addressController = TextEditingController(text: 'House 12, Road 5, Block C\nBanani, Dhaka-1213\nBangladesh');
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
+  late TextEditingController _addressController;
+
+  @override
+  void initState() {
+    super.initState();
+    final profile = ref.read(userProfileProvider);
+    _nameController = TextEditingController(text: profile.name);
+    _phoneController = TextEditingController(text: profile.phone);
+    _addressController = TextEditingController(text: profile.address);
+  }
 
   @override
   void dispose() {
@@ -95,9 +105,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  // Simulate saving
+                  await ref.read(userProfileProvider.notifier).updateProfile(
+                        name: _nameController.text,
+                        phone: _phoneController.text,
+                        address: _addressController.text,
+                      );
+
+                  if (!context.mounted) return;
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Profile updated successfully!')),
                   );
