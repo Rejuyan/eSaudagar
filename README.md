@@ -68,7 +68,13 @@ Contributions are welcome! If you have any suggestions or find a bug, please ope
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+You are free to use, modify, and distribute this software for personal and commercial purposes, provided that the original copyright notice and permission notice are included in all copies or substantial portions of the software.
+
+For more details, please see the [LICENSE](LICENSE) file.
 
 ---
 Developed with ❤️ by [Rejuyan](https://github.com/Rejuyan)
