@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "719790808121",
+    "project_id": "esaudagar-65583",
+    "storage_bucket": "esaudagar-65583.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719790808121:android:deab59db7e2af182ab81e8",
+        "android_client_info": {
+          "package_name": "com.example.esaudagar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719790808121-cosbij2p66qoctsls4dgb5fqp14n4e0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAlgyKyKa6_XgEed4uXQDPKCqmLDIivVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719790808121-cosbij2p66qoctsls4dgb5fqp14n4e0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
