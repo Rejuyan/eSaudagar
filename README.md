@@ -64,7 +64,9 @@
 
 | Home & Categories | Product Details | Cart & Checkout |
 |:---:|:---:|:---:|
+| ![Home](screenshots/preview.png) | ![Details](screenshots/details.png) | ![Checkout](screenshots/checkout.png) |
 | Modern Grid View | Pinch-to-Zoom Images | Smooth Checkout Flow |
+
 
 ## 🤝 Contributing
 
