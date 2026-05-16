@@ -161,7 +161,7 @@ abstract class AppLocalizations {
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
-  /// **'বাংলা ভাষা (Bengali)'**
+  /// **'Bengali Language (Bengali)'**
   String get language;
 
   /// No description provided for @editProfile.
@@ -403,6 +403,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No products found. Try a different keyword.'**
   String get noProductsFound;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no new notifications.'**
+  String get noNotifications;
+
+  /// No description provided for @searchTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchTab;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to eSaudagar 🛍️'**
+  String get welcomeMessage;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover premium products tailored for you.'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @noProductsInCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No products in this category yet.'**
+  String get noProductsInCategory;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email address.'**
+  String get emailRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email (e.g. user@example.com).'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password.'**
+  String get passwordRequired;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get passwordTooShort;
+
+  /// No description provided for @invalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password. Please try again.'**
+  String get invalidCredentials;
+
+  /// No description provided for @emailAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered. Try logging in.'**
+  String get emailAlreadyExists;
+
+  /// No description provided for @noInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network.'**
+  String get noInternet;
+
+  /// No description provided for @tooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Please wait a moment and try again.'**
+  String get tooManyRequests;
+
+  /// No description provided for @genericError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get genericError;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your eSaudagar account'**
+  String get createAccount;
+
+  /// No description provided for @signInToShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue shopping'**
+  String get signInToShop;
+
+  /// No description provided for @processingOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing your order...'**
+  String get processingOrder;
+
+  /// No description provided for @orderConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Confirmed! 🎉'**
+  String get orderConfirmed;
+
+  /// No description provided for @orderSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order has been placed successfully. You can track it in My Orders.'**
+  String get orderSuccessMessage;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
+
+  /// No description provided for @myWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'My Wishlist'**
+  String get myWishlist;
+
+  /// No description provided for @wishlistEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wishlist is empty'**
+  String get wishlistEmpty;
+
+  /// No description provided for @removedFromFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'removed from favorites'**
+  String get removedFromFavorites;
+
+  /// No description provided for @addedToFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'added to favorites!'**
+  String get addedToFavorites;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @inStock.
+  ///
+  /// In en, this message translates to:
+  /// **'In Stock ({count} available)'**
+  String inStock(Object count);
+
+  /// No description provided for @outOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of Stock'**
+  String get outOfStock;
+
+  /// No description provided for @startShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Shopping'**
+  String get startShopping;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get nameRequired;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully!'**
+  String get profileUpdated;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
 }
 
 class _AppLocalizationsDelegate

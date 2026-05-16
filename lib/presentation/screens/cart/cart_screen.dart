@@ -6,8 +6,10 @@ import 'package:esaudagar/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/navigation_provider.dart';
-import '../../../core/utils/fade_in_route.dart';
+import '../../widgets/empty_state.dart';
 import '../checkout/checkout_screen.dart';
+import '../../../core/utils/fade_in_route.dart';
+
 
 class CartScreen extends ConsumerWidget {
   const CartScreen({super.key});
@@ -23,31 +25,14 @@ class CartScreen extends ConsumerWidget {
         title: Text(l10n.cart),
       ),
       body: cartItems.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    l10n.yourCartIsEmpty,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(navigationProvider.notifier).setIndex(0);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: const Text('Start Shopping'),
-                  ),
-                ],
-              ),
+          ? EmptyStateWidget(
+              icon: Icons.shopping_cart_outlined,
+              title: l10n.yourCartIsEmpty,
+              description: 'Your cart is currently empty. Start adding some products!',
+              onActionPressed: () {
+                ref.read(navigationProvider.notifier).setIndex(0);
+              },
+              actionLabel: l10n.startShopping,
             )
           : ListView.builder(
               padding: const EdgeInsets.only(bottom: 100),

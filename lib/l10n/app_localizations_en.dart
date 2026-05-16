@@ -39,7 +39,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get darkMode => 'Dark Mode';
 
   @override
-  String get language => 'বাংলা ভাষা (Bengali)';
+  String get language => 'Bengali Language (Bengali)';
 
   @override
   String get editProfile => 'Edit Profile';
@@ -160,4 +160,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noProductsFound => 'No products found. Try a different keyword.';
+
+  @override
+  String get noNotifications => 'You have no new notifications.';
+
+  @override
+  String get searchTab => 'Search';
+
+  @override
+  String get welcomeMessage => 'Welcome to eSaudagar 🛍️';
+
+  @override
+  String get welcomeSubtitle => 'Discover premium products tailored for you.';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get noProductsInCategory => 'No products in this category yet.';
+
+  @override
+  String get emailRequired => 'Please enter your email address.';
+
+  @override
+  String get invalidEmail =>
+      'Please enter a valid email (e.g. user@example.com).';
+
+  @override
+  String get passwordRequired => 'Please enter your password.';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters.';
+
+  @override
+  String get invalidCredentials =>
+      'Incorrect email or password. Please try again.';
+
+  @override
+  String get emailAlreadyExists =>
+      'This email is already registered. Try logging in.';
+
+  @override
+  String get noInternet => 'No internet connection. Please check your network.';
+
+  @override
+  String get tooManyRequests =>
+      'Too many failed attempts. Please wait a moment and try again.';
+
+  @override
+  String get genericError => 'Something went wrong. Please try again.';
+
+  @override
+  String get createAccount => 'Create your eSaudagar account';
+
+  @override
+  String get signInToShop => 'Sign in to continue shopping';
+
+  @override
+  String get processingOrder => 'Processing your order...';
+
+  @override
+  String get orderConfirmed => 'Order Confirmed! 🎉';
+
+  @override
+  String get orderSuccessMessage =>
+      'Your order has been placed successfully. You can track it in My Orders.';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String get myWishlist => 'My Wishlist';
+
+  @override
+  String get wishlistEmpty => 'Your wishlist is empty';
+
+  @override
+  String get removedFromFavorites => 'removed from favorites';
+
+  @override
+  String get addedToFavorites => 'added to favorites!';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String inStock(Object count) {
+    return 'In Stock ($count available)';
+  }
+
+  @override
+  String get outOfStock => 'Out of Stock';
+
+  @override
+  String get startShopping => 'Start Shopping';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get nameRequired => 'Please enter your name';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully!';
+
+  @override
+  String get saveChanges => 'Save Changes';
 }

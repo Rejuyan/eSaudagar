@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:esaudagar/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_theme.dart';
-import '../../providers/wishlist_provider.dart';
-import '../product/product_detail_screen.dart';
 import '../../../core/utils/fade_in_route.dart';
+import '../../providers/navigation_provider.dart';
+import '../../providers/wishlist_provider.dart';
+
+import '../product/product_detail_screen.dart';
+import '../../widgets/empty_state.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
@@ -13,29 +17,24 @@ class WishlistScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wishlist = ref.watch(wishlistProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Wishlist'),
+        title: Text(l10n.myWishlist),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
       ),
       body: wishlist.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.favorite_border, size: 80, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Your wishlist is empty',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                ],
-              ),
+          ? EmptyStateWidget(
+              icon: Icons.favorite_border,
+              title: l10n.wishlistEmpty,
+              description: 'Items you love will appear here.',
+              onActionPressed: () {
+                ref.read(navigationProvider.notifier).setIndex(0);
+              },
+              actionLabel: 'Start Exploring',
             )
           : ListView.builder(
               padding: const EdgeInsets.all(16),

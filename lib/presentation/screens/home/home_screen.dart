@@ -9,7 +9,9 @@ import '../../providers/cart_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../providers/navigation_provider.dart';
 import '../../providers/product_provider.dart';
+
 import '../../widgets/shimmer_skeletons.dart';
+import '../../widgets/empty_state.dart';
 import '../../../core/utils/fade_in_route.dart';
 import '../../../domain/models/product_model.dart';
 import '../product/product_detail_screen.dart';
@@ -24,13 +26,30 @@ final _categoryMeta = <String, (IconData, Color)>{
   'Fashion': (Icons.checkroom_outlined, Color(0xFFEC4899)),
   'Sports': (Icons.sports_soccer_outlined, Color(0xFFF59E0B)),
   'Books': (Icons.menu_book_outlined, Color(0xFF6366F1)),
+  'Dress': (Icons.checkroom_outlined, Color(0xFFF43F5E)),
+  'Cosmetics': (Icons.face_retouching_natural_outlined, Color(0xFFD946EF)),
+  'Groceries': (Icons.shopping_basket_outlined, Color(0xFF10B981)),
 };
 
-class HomeScreen extends ConsumerWidget {
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final cartItems = ref.watch(cartProvider);
     final cartCount = cartItems.fold(0, (sum, item) => sum + item.quantity);
@@ -61,8 +80,8 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('You have no new notifications.'),
+                SnackBar(
+                  content: Text(l10n.noNotifications),
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -72,7 +91,6 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          // Refreshes the product provider to pull fresh data from Firestore
           return ref.refresh(productsProvider);
         },
         child: pages[currentIndex],
@@ -103,9 +121,8 @@ class HomeScreen extends ConsumerWidget {
             NavigationDestination(
               icon: const Icon(Icons.search_outlined),
               selectedIcon: const Icon(Icons.search),
-              label: 'Search',
+              label: l10n.searchTab,
             ),
-            // ─── FEATURE 1: Cart Badge ───
             NavigationDestination(
               icon: Badge(
                 isLabelVisible: cartCount > 0,
@@ -147,7 +164,7 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Welcome to eSaudagar 🛍️',
+                l10n.welcomeMessage,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -155,7 +172,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Discover premium products tailored for you.',
+                l10n.welcomeSubtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.white70,
                     ),
@@ -194,14 +211,61 @@ class HomeScreen extends ConsumerWidget {
                     onPressed: () =>
                         ref.read(selectedCategoryProvider.notifier).setCategory(null),
                     icon: const Icon(Icons.close, size: 16),
-                    label: const Text('Clear'),
+                    label: Text(l10n.clear),
                   ),
               ],
             );
           },
         ),
+        const SizedBox(height: 8),
+        _buildSortSelector(context, ref),
         const SizedBox(height: 16),
         _buildProductGrid(context, ref),
+      ],
+    );
+  }
+
+  Widget _buildSortSelector(BuildContext context, WidgetRef ref) {
+    final currentSort = ref.watch(sortingProvider);
+
+    final sortOptions = <ProductSort, String>{
+      ProductSort.priceLowToHigh: 'Price: Low to High',
+      ProductSort.priceHighToLow: 'Price: High to Low',
+      ProductSort.ratingHighToLow: 'Highest Rated',
+    };
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          'Sort by: ',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+              ),
+        ),
+        SizedBox(
+          width: 160,
+          child: DropdownButton<ProductSort>(
+            value: currentSort,
+            underline: const SizedBox(),
+            isExpanded: true,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(sortingProvider.notifier).setSort(value);
+              }
+            },
+            items: ProductSort.values.map((sort) {
+              return DropdownMenuItem<ProductSort>(
+                value: sort,
+                child: Text(sortOptions[sort] ?? 'Unknown'),
+              );
+            }).toList(),
+          ),
+        ),
       ],
     );
   }
@@ -280,15 +344,17 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildProductGrid(BuildContext context, WidgetRef ref) {
-    // Uses the filtered provider so category selection auto-updates the grid
-    final productsAsync = ref.watch(filteredProductsProvider);
+    // Uses the sorted provider so category selection and sorting auto-update the grid
+    final productsAsync = ref.watch(sortedProductsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return productsAsync.when(
       data: (products) {
         if (products.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(32),
-            child: Center(child: Text('No products in this category yet.')),
+          return EmptyStateWidget(
+            icon: Icons.category_outlined,
+            title: l10n.noProductsInCategory,
+            description: 'Explore other categories to find what you looking for.',
           );
         }
         return GridView.builder(
@@ -468,12 +534,22 @@ class HomeScreen extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: TextField(
+            controller: _searchController,
             onChanged: (value) {
               ref.read(searchQueryProvider.notifier).updateQuery(value);
             },
             decoration: InputDecoration(
               hintText: l10n.searchProducts,
               prefixIcon: const Icon(Icons.search),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        ref.read(searchQueryProvider.notifier).updateQuery('');
+                      },
+                    )
+                  : null,
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
@@ -490,9 +566,17 @@ class HomeScreen extends ConsumerWidget {
               if (products.isEmpty) {
                 final query = ref.read(searchQueryProvider);
                 if (query.isEmpty) {
-                  return Center(child: Text(l10n.startTypingToSearch));
+                  return EmptyStateWidget(
+                    icon: Icons.search,
+                    title: l10n.startTypingToSearch,
+                    description: 'Search for a product by name or category.',
+                  );
                 }
-                return Center(child: Text(l10n.noProductsFound));
+                return EmptyStateWidget(
+                  icon: Icons.search_off,
+                  title: l10n.noProductsFound,
+                  description: 'Try a different keyword or browse categories.',
+                );
               }
               return GridView.builder(
                 padding: const EdgeInsets.all(16),

@@ -76,12 +76,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             const SizedBox(height: 32),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Full Name',
+              decoration: InputDecoration(
+
+                labelText: l10n.fullName,
                 prefixIcon: Icon(Icons.person_outline),
                 border: OutlineInputBorder(),
               ),
-              validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
+              validator: (value) => value == null || value.isEmpty ? l10n.nameRequired : null,
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -116,7 +117,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   if (!context.mounted) return;
                   
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Profile updated successfully!')),
+                    SnackBar(content: Text(l10n.profileUpdated)),
                   );
                   Navigator.of(context).pop();
                 }
@@ -125,7 +126,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 minimumSize: const Size(double.infinity, 56),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('Save Changes'),
+              child: Text(l10n.saveChanges),
             ),
           ],
         ),

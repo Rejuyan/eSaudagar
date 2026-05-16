@@ -4,6 +4,7 @@ import 'package:esaudagar/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/user_provider.dart';
 import '../home/home_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
   bool _isRegistering = false;
   // ─── FEATURE 2: Password visibility toggle ───
   bool _passwordVisible = false;
@@ -25,27 +29,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
   // ─── FEATURE 2: Clean, human-readable validation messages ───
   String? _validateEmail(String? value) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter your email address.';
+      return l10n.emailRequired;
     }
     final emailRegex = RegExp(r'^[\w.-]+@[\w.-]+\.\w{2,}$');
     if (!emailRegex.hasMatch(value.trim())) {
-      return 'Please enter a valid email (e.g. user@example.com).';
+      return l10n.invalidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.isEmpty) {
-      return 'Please enter your password.';
+      return l10n.passwordRequired;
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters.';
+      return l10n.passwordTooShort;
     }
     return null;
   }
@@ -58,6 +67,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (_isRegistering) {
       await ref.read(authProvider.notifier).register(email, password);
+      // Save additional profile info
+      await ref.read(userProfileProvider.notifier).updateProfile(
+        name: _nameController.text.trim(),
+        phone: _phoneController.text.trim(),
+        address: _addressController.text.trim(),
+      );
     } else {
       await ref.read(authProvider.notifier).login(email, password);
     }
@@ -73,21 +88,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // ─── FEATURE 2: Map Firebase codes to clean messages ───
       final rawError = authState.error.toString();
       String friendlyMessage;
+      final l10n = AppLocalizations.of(context)!;
 
       if (rawError.contains('user-not-found') ||
           rawError.contains('wrong-password') ||
           rawError.contains('invalid-credential')) {
-        friendlyMessage = 'Incorrect email or password. Please try again.';
+        friendlyMessage = l10n.invalidCredentials;
       } else if (rawError.contains('email-already-in-use')) {
-        friendlyMessage = 'This email is already registered. Try logging in.';
+        friendlyMessage = l10n.emailAlreadyExists;
       } else if (rawError.contains('network-request-failed')) {
-        friendlyMessage = 'No internet connection. Please check your network.';
+        friendlyMessage = l10n.noInternet;
       } else if (rawError.contains('too-many-requests')) {
         friendlyMessage =
-            'Too many failed attempts. Please wait a moment and try again.';
+            l10n.tooManyRequests;
       } else {
-        friendlyMessage = 'Something went wrong. Please try again.';
+        friendlyMessage = l10n.genericError;
       }
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -136,8 +153,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 8),
                   Text(
                     _isRegistering
-                        ? 'Create your eSaudagar account'
-                        : 'Sign in to continue shopping',
+                        ? l10n.createAccount
+                        : l10n.signInToShop,
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -146,7 +163,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 40),
 
+                  // Name Field (Registration only)
+                  if (_isRegistering) ...[
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: AppTheme.softShadows,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextFormField(
+                        controller: _nameController,
+                        validator: (v) => v == null || v.isEmpty ? l10n.nameRequired : null,
+                        decoration: InputDecoration(
+                          labelText: l10n.fullName,
+                          prefixIcon: const Icon(Icons.person_outline),
+                        ),
+                        textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
                   // Email Field
+
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: AppTheme.softShadows,
@@ -165,7 +203,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
 
+                  // Phone Field (Registration only)
+                  if (_isRegistering) ...[
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: AppTheme.softShadows,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextFormField(
+                        controller: _phoneController,
+                        decoration: InputDecoration(
+                          labelText: l10n.phoneNumber,
+                          prefixIcon: const Icon(Icons.phone_outlined),
+                        ),
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Address Field (Registration only)
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: AppTheme.softShadows,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextFormField(
+                        controller: _addressController,
+                        decoration: InputDecoration(
+                          labelText: l10n.shippingAddress,
+                          prefixIcon: const Icon(Icons.location_on_outlined),
+                        ),
+                        maxLines: 2,
+                        textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
                   // ─── FEATURE 2: Password Field with Visibility Toggle ───
+
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: AppTheme.softShadows,

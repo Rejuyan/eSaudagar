@@ -78,9 +78,9 @@ class ProductDetailScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                isInWishlist 
-                                  ? '${product.title} removed from favorites' 
-                                  : '${product.title} added to favorites!'
+                                isInWishlist
+                                  ? '${product.title} ${l10n.removedFromFavorites}'
+                                  : '${product.title} ${l10n.addedToFavorites}'
                               ),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -162,7 +162,7 @@ class ProductDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Description',
+                    l10n.description,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -183,7 +183,8 @@ class ProductDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        product.stockCount > 0 ? 'In Stock (${product.stockCount} available)' : 'Out of Stock',
+                        product.stockCount > 0 ? l10n.inStock(product.stockCount) : l10n.outOfStock,
+
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: product.stockCount > 0 ? Colors.green : Colors.red,
@@ -232,7 +233,7 @@ class ProductDetailScreen extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 56),
           ),
-          child: const Text('Add to Cart'),
+          child: Text(l10n.addToCart),
         ),
       ),
     );

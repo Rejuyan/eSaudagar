@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/models/product_model.dart';
 
 class ProductRepository {
@@ -132,6 +133,91 @@ class ProductRepository {
       rating: 4.8,
       reviewCount: 72,
     ),
+    Product(
+      productId: '10',
+      title: 'Luxury Silk Saree',
+      description: 'Exquisite hand-woven silk saree with intricate gold zari work. Perfect for weddings and special occasions.',
+      price: 25000,
+      stockCount: 10,
+      category: 'Dress',
+      images: [
+        'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['saree', 'silk', 'dress', 'traditional', 'wedding'],
+      rating: 4.9,
+      reviewCount: 28,
+    ),
+    Product(
+      productId: '11',
+      title: 'Casual Summer T-Shirt',
+      description: '100% organic cotton T-shirt, breathable and soft for everyday wear.',
+      price: 1200,
+      stockCount: 150,
+      category: 'Dress',
+      images: [
+        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['tshirt', 'casual', 'cotton', 'dress', 'summer'],
+      rating: 4.5,
+      reviewCount: 142,
+    ),
+    Product(
+      productId: '12',
+      title: 'Matte Liquid Lipstick',
+      description: 'Long-lasting, smudge-proof matte lipstick with a velvet finish. Available in various shades.',
+      price: 1800,
+      stockCount: 200,
+      category: 'Cosmetics',
+      images: [
+        'https://images.unsplash.com/photo-1586776977607-310e9c725c37?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['lipstick', 'makeup', 'cosmetics', 'matte'],
+      rating: 4.7,
+      reviewCount: 310,
+    ),
+    Product(
+      productId: '13',
+      title: 'Organic Face Serum',
+      description: 'Hydrating face serum with Vitamin C and Hyaluronic acid for a glowing complexion.',
+      price: 3200,
+      stockCount: 45,
+      category: 'Cosmetics',
+      images: [
+        'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['serum', 'skincare', 'cosmetics', 'organic'],
+      rating: 4.8,
+      reviewCount: 85,
+    ),
+    Product(
+      productId: '14',
+      title: 'Premium Basmati Rice',
+      description: 'Long-grain, aromatic basmati rice aged for 2 years for the finest taste.',
+      price: 850,
+      stockCount: 500,
+      category: 'Groceries',
+      images: [
+        'https://images.unsplash.com/photo-1586201327693-866199f12179?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['rice', 'groceries', 'food', 'basmati'],
+      rating: 4.6,
+      reviewCount: 120,
+    ),
+    Product(
+      productId: '15',
+      title: 'Raw Organic Honey',
+      description: '100% pure, unfiltered raw honey collected from organic wild-flower hives.',
+      price: 1500,
+      stockCount: 75,
+      category: 'Groceries',
+      images: [
+        'https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1000&auto=format&fit=crop',
+      ],
+      searchTags: ['honey', 'groceries', 'organic', 'food'],
+      rating: 4.9,
+      reviewCount: 64,
+    ),
+
   ];
 
   ProductRepository() {
@@ -147,18 +233,20 @@ class ProductRepository {
         }
       }
     } catch (e) {
-      // Ignore if Firebase isn't correctly configured yet
+      debugPrint('Error seeding database: $e');
     }
   }
 
   Stream<List<Product>> getProducts() {
     return _firestore.collection('products').snapshots().map((snapshot) {
       if (snapshot.docs.isEmpty) {
-        return _dummyProducts; // Fallback to dummy data if DB is empty/unreachable
+        debugPrint('Firestore products collection is empty. Using dummy data fallback.');
+        return _dummyProducts;
       }
       return snapshot.docs.map((doc) => Product.fromFirestore(doc.data(), doc.id)).toList();
-    }).handleError((_) {
-      return _dummyProducts; // Fallback if no network or unconfigured
+    }).handleError((error) {
+      debugPrint('Error fetching products from Firestore: $error');
+      return _dummyProducts;
     });
   }
 }

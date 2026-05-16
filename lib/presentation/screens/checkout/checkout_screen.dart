@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/order_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../../domain/models/order_model.dart';
+import '../profile/edit_profile_screen.dart';
 import 'package:esaudagar/l10n/app_localizations.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
@@ -21,6 +23,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final total = ref.watch(cartTotalProvider);
+    final userProfile = ref.watch(userProfileProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -38,7 +41,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   const CircularProgressIndicator(),
                   const SizedBox(height: 24),
                   Text(
-                    'Processing your order...',
+                    l10n.processingOrder,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -65,20 +68,25 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'John Doe',
+                        userProfile.name,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'House 12, Road 5, Block C\nBanani, Dhaka-1213\nBangladesh',
+                        userProfile.address,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                          );
+                        },
                         child: Text(l10n.changeAddress),
                       )
                     ],
+
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -224,6 +232,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final order = OrderModel(
       orderId: DateTime.now().millisecondsSinceEpoch.toString().substring(5),
       date: DateTime.now(),
+
       items: items,
       totalAmount: total + 60, // Including delivery fee
     );
@@ -231,41 +240,44 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
     // Clear cart and show success
     ref.read(cartProvider.notifier).clearCart();
-    
+
     // Pop checkout screen
     Navigator.of(context).pop();
-    
+
     // Show success dialog
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 80),
-            const SizedBox(height: 24),
-            Text(
-              'Order Confirmed! 🎉',
-              style: Theme.of(ctx).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Your order has been placed successfully. You can track it in My Orders.',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx)!;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.check_circle, color: Colors.green, size: 80),
+              const SizedBox(height: 24),
+              Text(
+                l10n.orderConfirmed,
+                style: Theme.of(ctx).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
-              child: const Text('Back to Home'),
-            ),
-          ],
-        ),
-      ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.orderSuccessMessage,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                child: Text(l10n.backToHome),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

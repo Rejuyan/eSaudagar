@@ -133,7 +133,7 @@ class ProfileScreen extends ConsumerWidget {
               );
             },
             icon: const Icon(Icons.favorite_outline),
-            label: const Text('My Wishlist'),
+            label: Text(l10n.myWishlist),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 56),
               backgroundColor: Colors.white,
